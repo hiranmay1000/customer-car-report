@@ -1,0 +1,23 @@
+.customer-input{
+    width: 70%;
+    margin: 60px auto;
+    background-color: rgb(163, 195, 226);
+    border-radius: 25px;
+    padding: 80px 100px;
+
+    form{
+        label{
+            display: flex;
+            justify-content: space-between;
+
+            input{
+                border:none;
+                border-radius: 5px;
+                outline: none;
+                width: 40%;
+                padding: 5px 10px;
+            }
+        }
+    }
+
+}

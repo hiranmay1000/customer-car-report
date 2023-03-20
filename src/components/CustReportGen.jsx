@@ -80,7 +80,7 @@ export default function CustReportGen() {
     };
 
     return (
-        <div>
+        <div className="customer-input">
             <form onSubmit={handleSubmit}>
                 <label>
                     Dealer Name:
