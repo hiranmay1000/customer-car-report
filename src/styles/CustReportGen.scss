@@ -1,23 +1,50 @@
-.customer-input{
+.customer-input {
     width: 70%;
     margin: 60px auto;
     background-color: rgb(163, 195, 226);
     border-radius: 25px;
-    padding: 80px 100px;
+    padding: 100px 100px;
 
-    form{
-        label{
+    form {
+        label {
             display: flex;
             justify-content: space-between;
 
-            input{
-                border:none;
+            input {
+                border: none;
                 border-radius: 5px;
                 outline: none;
                 width: 40%;
                 padding: 5px 10px;
+                background-color: #fff;
+
+                &:hover {
+                    background-color: #e7e7e7;
+                }
             }
         }
     }
+}
 
+@media screen and (max-width: 600px) {
+    .customer-input {
+        width: 95%;
+        padding: 60px 20px;
+
+        form {
+            label {
+    
+                input {
+                    width: 50%;
+                    padding: 5px 10px;
+                    background-color: #fff;
+    
+                    &:hover {
+                        background-color: #dadada;
+                    }
+                }
+            }
+        }
+
+    }
 }

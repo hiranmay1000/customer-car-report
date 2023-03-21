@@ -2,52 +2,95 @@ import React, { useState } from "react";
 import { Button } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
-// import myImgs from "../custImg/bw-desktop.jpg";
+import msLogo from "../imgs/ms-logo.jpg";
 
 export default function CustReportGen() {
-    const [dealerName, setDealerName] = useState("");
-    const [dealerLocation, setDealerLocation] = useState("");
-    const [dealerDate, setDealerDate] = useState("");
+    // const currDate = new Date();
+
+    const today = new Date();
+    const yyyy = today.getFullYear();
+    let mm = today.getMonth() + 1; // Months start at 0!
+    let dd = today.getDate();
+
+    if (dd < 10) dd = "0" + dd;
+    if (mm < 10) mm = "0" + mm;
+
+    const currDate = dd + "/" + mm + "/" + yyyy;
+
+    const [dealerName, setDealerName] = useState("Bhandari Auto");
+    const [dealerLocation, setDealerLocation] = useState("Kolkata");
+    const [dealerDate, setDealerDate] = useState(currDate);
     const [customerName, setCustomerName] = useState("");
     const [customerMobile, setCustomerMobile] = useState("");
-    const [customerEmail, setCustomerEmail] = useState("");
+    const [customerEmail, setCustomerEmail] = useState("@gmail.com");
     const [vehicleRegNo, setVehicleRegNo] = useState("");
     const [vehicleModel, setVehicleModel] = useState("");
+    const [odoReading, setOdoReading] = useState("");
     const [vehicleSaleDate, setVehicleSaleDate] = useState("");
     const [vehicleChassisNo, setVehicleChassisNo] = useState("");
     const [numOfPanels, setNumOfPanels] = useState("");
     const [panelDetails, setPanelDetails] = useState("");
     const [panelDamageType, setPanelDamageType] = useState("");
     const [panelDamageLocation, setPanelDamageLocation] = useState("");
-    const [panelImage, setPanelImage] = useState("");
+    // const [panelImage, setPanelImage] = useState("");
 
     const handleInputChange = (e, setter) => {
         setter(e.target.value);
     };
 
+    const doc = new jsPDF("portrait", "px", "a4", "false");
     const handleSubmit = (e) => {
         e.preventDefault();
-        const doc = new jsPDF("portrait", "px", "a4", "false");
-        doc.addImage(panelImage, "jpg", 65, 20, 200, 400);
-        doc.addPage();
 
-        const tableData = [
-            ["DEALER DETAILS", "", "", ""],
+        // Configure table layout and styling
+        const tableConfig = {
+            margin: { top: 80 },
+            styles: { halign: "left" },
+            columnStyles: {
+                0: { fontStyle: "bold" },
+                1: { columnWidth: "auto" },
+                2: { fontStyle: "bold" },
+                3: { columnWidth: "auto" },
+            },
+        };
+
+        doc.addImage(msLogo, 20, 20, 200, 40);
+        const dealerData = [
             ["Dealer Name:", dealerName, "", ""],
             ["City/Location:", dealerLocation, "", ""],
             ["Date", dealerDate, "", ""],
-            ["CUSTOMER DETAILS", "", "", ""],
+        ];
+
+        doc.autoTable(["DEALER DETAILS", "", "", ""], dealerData, tableConfig);
+
+        const customerData = [
             ["Name of the customer", customerName, "", ""],
             ["Mobile Number", customerMobile, "", ""],
             ["Email Id", customerEmail, "", ""],
-            ["VEHICLE DETAILS", "", "", ""],
+        ];
+        doc.autoTable(
+            ["CUSTOMER DETAILS", ""],
+            customerData,
+            tableConfig
+        );
+
+        const vehicleData = [
             ["Vehicle Registration Number", vehicleRegNo, "", ""],
             ["Vehicle Model", vehicleModel, "", ""],
-            ["Odometer Reading: ", vehicleModel, "", ""],
+            ["Odometer Reading: ", odoReading, "", ""],
             ["Sale Date", vehicleSaleDate, "", ""],
             ["Chassis Number", vehicleChassisNo, "", ""],
             ["DAMAGE DETAILS", "", "", ""],
             ["Number of Panel damaged", numOfPanels, "", ""],
+        ];
+        doc.autoTable(["VEHICLE DETAILS", "", "", ""], vehicleData);
+
+        // Add table to the PDF
+        // Save the PDF
+
+        doc.addPage();
+        doc.addImage(msLogo, 20, 20, 200, 40);
+        const panelsData = [
             ["Which body panel(s) require repair?", panelDetails, "", ""],
             [
                 "What type of damage is present on the panel(s)?",
@@ -62,20 +105,11 @@ export default function CustReportGen() {
                 "",
             ],
         ];
+        doc.autoTable(["PANEL 1", "", "", ""], panelsData, tableConfig);
 
-        // Configure table layout and styling
-        const tableConfig = {
-            styles: { halign: "left" },
-            columnStyles: {
-                0: { fontStyle: "bold" },
-                1: { columnWidth: "auto" },
-                2: { fontStyle: "bold" },
-                3: { columnWidth: "auto" },
-            },
-        };
-        // Add table to the PDF
-        doc.autoTable(["", "", "", ""], tableData, tableConfig);
-        // Save the PDF
+        doc.addPage();
+        doc.setFont("Helvetica", "bold");
+        doc.text(0, 0, "DEALER DETAILS");
         doc.save("customer-report.pdf");
     };
 
@@ -111,11 +145,13 @@ export default function CustReportGen() {
                     />
                 </label>
                 <br />
+                <hr />
                 <label>
                     Customer Name:
                     <input
                         type="text"
                         value={customerName}
+                        placeholder={"Anup Mahato"}
                         onChange={(e) => handleInputChange(e, setCustomerName)}
                     />
                 </label>
@@ -125,6 +161,7 @@ export default function CustReportGen() {
                     <input
                         type="text"
                         value={customerMobile}
+                        placeholder="90XXXXXXX"
                         onChange={(e) =>
                             handleInputChange(e, setCustomerMobile)
                         }
@@ -136,10 +173,12 @@ export default function CustReportGen() {
                     <input
                         type="text"
                         value={customerEmail}
+                        placeholder="username@gmail.com"
                         onChange={(e) => handleInputChange(e, setCustomerEmail)}
                     />
                 </label>
                 <br />
+                <hr />
                 <label>
                     Vehicle Registration Number:
                     <input
@@ -155,6 +194,16 @@ export default function CustReportGen() {
                         type="text"
                         value={vehicleModel}
                         onChange={(e) => handleInputChange(e, setVehicleModel)}
+                    />
+                </label>
+                <br />
+                <label>
+                    Vehicle Model:
+                    <input
+                        type="text"
+                        value={odoReading}
+                        placeholder={"10000 km"}
+                        onChange={(e) => handleInputChange(e, setOdoReading)}
                     />
                 </label>
                 <br />
@@ -224,7 +273,8 @@ export default function CustReportGen() {
                     Panel Image:
                     <input
                         type="file"
-                        onChange={(e) => setPanelImage(e.target.files[0])}
+                        multiple
+                        // onChange={(e) => setPanelImage(e.target.files)}
                     />
                 </label>
                 <br />
