@@ -10,20 +10,21 @@ body {
     box-shadow: 0px 0px 120px #050505;
     position: relative;
 
-    h1{
+    h1 {
         text-align: center;
-        color:#2d3c57;
+        color: #2d3c57;
     }
 
     form {
-        h3{
+        h3 {
             color: slategray;
         }
         label {
             display: flex;
             justify-content: space-between;
-            font-weight: bold;
+            font-weight: 500;
             font-size: large;
+            color: #193b4b;
 
             input {
                 border: none;
@@ -38,41 +39,40 @@ body {
                 }
             }
         }
-        
-        #add-panel-btn, #delete-panel-btn{
+
+        #add-panel-btn,
+        #delete-panel-btn {
             margin-right: 5px;
             margin-bottom: 5px;
             background-color: #b3e6b3;
             cursor: pointer;
             border-radius: 5px;
-            border:none;
+            border: none;
             padding: 8px 12px;
             background-image: linear-gradient(to left, #93dd93, #a6f0a6);
-            
-            &:hover{
+
+            &:hover {
                 background-image: linear-gradient(to left, #b5eeb5, #8fcf8f);
             }
         }
-        
-        #delete-panel-btn{
+
+        #delete-panel-btn {
             background-color: #fda5a5;
             background-image: linear-gradient(to left, #fda5a5, #ec8989);
-            
-            
-            &:hover{
+
+            &:hover {
                 background-image: linear-gradient(to left, #ec8989, #fda5a5);
             }
         }
     }
 }
 
-.panel-inputs-increment{
+.panel-inputs-increment {
     background-color: #94b2ce;
     box-shadow: 0px 0px 25px #22404e;
-    padding: 20px;
-    border-radius:20px;
+    padding: 40px;
+    border-radius: 20px;
     margin-bottom: 50px;
-    
 }
 
 .preview-panel-img {
@@ -128,5 +128,13 @@ body {
                 }
             }
         }
+    }
+
+    .panel-inputs-increment {
+        padding: 15px;
+    }
+    .dropdown {
+        min-width: 45%;
+        margin-left: 15px;
     }
 }

@@ -38,10 +38,9 @@ export default function CustReportGen() {
     const [insuProvider, setInsuProvider] = useState("N/A");
     const [isInterested, setIsInterested] = useState("N/A");
 
-    const [numOfPanels, setNumOfPanels] = useState("");
-    const [panelDetails, setPanelDetails] = useState("");
-    const [panelDamageType, setPanelDamageType] = useState("");
-    const [panelDamageLocation, setPanelDamageLocation] = useState("");
+    const [panelBody, setPanelBody] = useState("N/A");
+    const [panelType, setPanelType] = useState("N/A");
+    const [panelLocation, setPanelLocation] = useState("N/A");
 
     const [panelImage, setPanelImage] = useState([]);
 
@@ -116,37 +115,22 @@ export default function CustReportGen() {
 
         // Third Table
         const damageData = [
-            ["Number of Panel damaged", numOfPanels, "", ""],
             ["", "", "", ""],
             ["PANEL 1"],
-            ["Which body panel(s) require repair?", panelDetails, "", ""],
+            ["Which body panel(s) require repair?", panelBody, "", ""],
             [
                 "What type of damage is present on the panel(s)?",
-                panelDamageType,
+                panelType,
                 "",
                 "",
             ],
             [
                 "Where is the damage located on the panel(s)?",
-                panelDamageLocation,
+                panelLocation,
                 "",
                 "",
             ],
             ["", "", "", ""],
-            ["PANEL 2"],
-            ["Which body panel(s) require repair?", panelDetails, "", ""],
-            [
-                "What type of damage is present on the panel(s)?",
-                panelDamageType,
-                "",
-                "",
-            ],
-            [
-                "Where is the damage located on the panel(s)?",
-                panelDamageLocation,
-                "",
-                "",
-            ],
         ];
 
         doc.autoTable(["DAMAGE DETAILS", "", "", ""], damageData, tableConfig2);
@@ -172,7 +156,7 @@ export default function CustReportGen() {
             ["Customer interested for repair ", isInterested],
         ];
         doc.autoTable(
-            ["FINALIZE DETAILS", ""],
+            ["FINALIZE DETAILS", "", ""],
             finalizeData,
             tableConfigFinalize
         );
@@ -376,7 +360,13 @@ export default function CustReportGen() {
                     <br />
                     <h3>PANEL DETAILS</h3>
                     <br />
-                    <GetInputs />
+                    <GetInputs
+                        setPanelBody={setPanelBody}
+                        panelBody = {panelBody}
+                        setPanelType={setPanelType}
+                        panelType = {panelType}
+                        setPanelLocation={setPanelLocation}
+                    />
                     <br />
                     <br />
 
@@ -389,13 +379,13 @@ export default function CustReportGen() {
                         setTotalRepairEst={setTotalRepairEst}
                         setAmtPayable={setAmtPayable}
                         setCustPolicy={setCustPolicy}
-                        setPolicyType={setPolicyType}
-                        setInsuProvider={setInsuProvider}
-                        setIsInterested={setIsInterested}
                         custPolicy={custPolicy}
+                        setPolicyType={setPolicyType}
                         policyType={policyType}
-                        isInterested={isInterested}
+                        setInsuProvider={setInsuProvider}
                         insuProvider={insuProvider}
+                        setIsInterested={setIsInterested}
+                        isInterested={isInterested}
                     />
 
                     <hr />
@@ -425,7 +415,7 @@ export default function CustReportGen() {
     );
 }
 
-const GetInputs = () => {
+const GetInputs = (gi) => {
     const [inputs, setInputs] = useState([
         {
             bodyPanel: "Select",
@@ -497,7 +487,7 @@ const GetInputs = () => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {value.bodyPanel}
+                                {gi.panelBody}
                             </button>
                             <ul className="dropdown-menu">
                                 <li>
@@ -508,7 +498,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: "Front Bumper",
+                                                    bodyPanel: gi.setPanelBody("Front Bumper"),
                                                 },
                                                 index
                                             )
@@ -525,7 +515,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: "Rear Bumper",
+                                                    bodyPanel: gi.setPanelBody("Rear Bumper"),
                                                 },
                                                 index
                                             )
@@ -543,7 +533,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: "Side doors",
+                                                    bodyPanel: gi.setPanelBody("Side door"),
                                                 },
                                                 index
                                             )
@@ -561,7 +551,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: "Rooftop",
+                                                    bodyPanel: gi.setPanelBody("Rooftop"),
                                                 },
                                                 index
                                             )
@@ -583,7 +573,7 @@ const GetInputs = () => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {value.damageType}
+                                {gi.panelType}
                             </button>
                             <ul className="dropdown-menu">
                                 <li>
@@ -594,7 +584,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: "Dent",
+                                                    damageType: gi.setPanelType("Dent"),
                                                 },
                                                 index
                                             )
@@ -611,7 +601,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: "Scratch",
+                                                    damageType: gi.setPanelType("Scratch"),
                                                 },
                                                 index
                                             )
@@ -629,7 +619,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: "Crack",
+                                                    damageType: gi.setPanelType("Crack"),
                                                 },
                                                 index
                                             )
@@ -647,7 +637,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: "Fracture",
+                                                    damageType: gi.setPanelType("Fracture"),
                                                 },
                                                 index
                                             )
@@ -665,7 +655,7 @@ const GetInputs = () => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: "Rust",
+                                                    damageType: gi.setPanelType("Rust"),
                                                 },
                                                 index
                                             )
@@ -1021,7 +1011,7 @@ const FinalizeCustData = (fi) => {
             </label>
             <br />
             <label>
-            Estimated cost of repair:
+                Estimated cost of repair:
                 <input
                     type="number"
                     onChange={(e) => {
@@ -1031,7 +1021,7 @@ const FinalizeCustData = (fi) => {
             </label>
             <br />
             <label>
-            Expected cost to be paid by customer after insurnace coverage:
+                Expected cost to be paid by customer after insurnace coverage:
                 <input
                     type="number"
                     onChange={(e) => {
