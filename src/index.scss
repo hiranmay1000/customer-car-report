@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.dropdown{
+  width: 40%;
+
+  button{
+    width: 100%;
+    text-align: left;
+  }
+  .dropdown-toggle::after{
+    float: right;
+    margin-top: 10px;
+  }
+}

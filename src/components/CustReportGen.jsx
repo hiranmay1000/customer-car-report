@@ -19,18 +19,29 @@ export default function CustReportGen() {
     const [dealerName, setDealerName] = useState("Bhandari Auto");
     const [dealerLocation, setDealerLocation] = useState("Kolkata");
     const [dealerDate, setDealerDate] = useState(currDate);
+
     const [customerName, setCustomerName] = useState("");
     const [customerMobile, setCustomerMobile] = useState("");
     const [customerEmail, setCustomerEmail] = useState("@gmail.com");
+
     const [vehicleRegNo, setVehicleRegNo] = useState("");
     const [vehicleModel, setVehicleModel] = useState("");
     const [odoReading, setOdoReading] = useState("");
     const [vehicleSaleDate, setVehicleSaleDate] = useState("");
     const [vehicleChassisNo, setVehicleChassisNo] = useState("");
+
+    const [repairEst, setRepairEst] = useState(0);
+    const [totalRepairEst, setTotalRepairEst] = useState(0);
+    const [amtPayable, setAmtPayable] = useState(0);
+    const [custPolicy, setCustPolicy] = useState("N/A");
+    const [policyType, setPolicyType] = useState("");
+    const [isInterested, setIsInterested] = useState("");
+
     const [numOfPanels, setNumOfPanels] = useState("");
     const [panelDetails, setPanelDetails] = useState("");
     const [panelDamageType, setPanelDamageType] = useState("");
     const [panelDamageLocation, setPanelDamageLocation] = useState("");
+
     const [panelImage, setPanelImage] = useState([]);
 
     const handleInputChange = (e, setter) => {
@@ -43,6 +54,7 @@ export default function CustReportGen() {
 
     const doc = new jsPDF("portrait", "px", "a4", "false");
     const handleSubmit = (e) => {
+        console.log(custPolicy);
         e.preventDefault();
 
         // Configure table layout and styling
@@ -86,17 +98,12 @@ export default function CustReportGen() {
         // Second Table
         const vehicleData = [
             [
-                "Vehicle Registration Number",
+                "Vehicle Registration No.",
                 vehicleRegNo,
                 "Vehicle Model",
                 vehicleModel,
             ],
-            [
-                "Odometer Reading: ",
-                odoReading,
-                "Chassis Number",
-                vehicleChassisNo,
-            ],
+            ["Odometer Reading ", odoReading, "Chassis No.", vehicleChassisNo],
             ["Sale Date", vehicleSaleDate, "", ""],
             ["", "", "", ""],
         ];
@@ -140,7 +147,22 @@ export default function CustReportGen() {
                 "",
             ],
         ];
+
         doc.autoTable(["DAMAGE DETAILS", "", "", ""], damageData, tableConfig2);
+
+        const finalizeData = [
+            ["Customer has active policy: ", custPolicy, "", ""],
+            ["Type of policy ", policyType, "", ""],
+            ["Repair estimate", repairEst, "", ""],
+            ["Total repair estimate ", totalRepairEst, "", ""],
+            ["Amount payble by customer", amtPayable, "", ""],
+            ["Customer interested for repair ", isInterested, "", ""],
+        ];
+        doc.autoTable(
+            ["FINALIZE DETAILS", "", "", ""],
+            finalizeData,
+            tableConfig
+        );
 
         // PDF Page 2
         const PAGE_WIDTH = 595; // A4 page width in pixels
@@ -179,9 +201,6 @@ export default function CustReportGen() {
             img.src = panelImage[i];
         }
 
-        // Save the PDF to a local file
-        // doc.save("example.pdf");
-
         doc.save("customer-report.pdf");
     };
 
@@ -195,15 +214,16 @@ export default function CustReportGen() {
         setPanelImage(imgArr);
     };
 
-    const formHandle = (e) => {
-        document.getElementById("form").innerHTML =
-            "<label>Input: <input type='text' /></label>";
-    };
-
     return (
         <>
             <div className="customer-input">
-                <form onSubmit={handleSubmit} onClick={formHandle}>
+                <h1>FILL THE FORM</h1>
+                <br />
+                <form onSubmit={handleSubmit}>
+                    <hr />
+                    <br />
+                    <h3>DEALER DETAILS</h3>
+                    <br />
                     <label>
                         Dealer Name:
                         <input
@@ -239,6 +259,8 @@ export default function CustReportGen() {
                     </label>
                     <br />
                     <hr />
+                    <br />
+                    <h3>CUSTOMER DETAILS</h3>
                     <br />
                     <label>
                         Customer Name:
@@ -277,6 +299,8 @@ export default function CustReportGen() {
                     </label>
                     <br />
                     <hr />
+                    <br />
+                    <h3>VEHICLE DETAILS</h3>
                     <br />
                     <label>
                         Vehicle Registration Number:
@@ -334,8 +358,32 @@ export default function CustReportGen() {
                         />
                     </label>
                     <br />
-                    <div id="form"></div>
+
+                    <hr />
                     <br />
+                    <h3>PANEL DETAILS</h3>
+                    <br />
+                    <GetInputs />
+                    <br />
+                    <br />
+
+                    <hr />
+                    <br />
+
+                    <FinalizeCustData
+                        handleInputChange={handleInputChange}
+                        setRepairEst={setRepairEst}
+                        setTotalRepairEst={setTotalRepairEst}
+                        setAmtPayable={setAmtPayable}
+                        setCustPolicy={setCustPolicy}
+                        setPolicyType={setPolicyType}
+                        setIsInterested={setIsInterested}
+                        custPolicy={custPolicy}
+                    />
+
+                    <hr />
+                    <br />
+                    <h3>UPLOAD IMAGES</h3>
                     <br />
                     <label>
                         Panel Image:
@@ -360,34 +408,697 @@ export default function CustReportGen() {
     );
 }
 
+const GetInputs = () => {
+    const [inputs, setInputs] = useState([
+        {
+            bodyPanel: "Select",
+            damageType: "Select",
+            damageLocation: "Select",
+            damageSeverity: "Select",
+            remarks: "",
+        },
+    ]);
+    const [cntDamagedPanel, setCntDamagePanel] = useState(1);
+
+    const addInput = () => {
+        if (inputs.length < 15) {
+            setInputs([
+                ...inputs,
+                {
+                    bodyPanel: "Select",
+                    damageType: "Select",
+                    damageLocation: "Select",
+                    damageSeverity: "Select",
+                    remarks: "",
+                },
+            ]);
+            const newInputs = [...inputs];
+            setCntDamagePanel(newInputs.length + 1);
+        } else {
+            setCntDamagePanel("Maximum limit reached!");
+        }
+    };
+
+    const deleteInput = () => {
+        if (inputs.length > 0) {
+            const newInputs = [...inputs];
+            newInputs.splice(newInputs.length - 1, 1);
+            setInputs(newInputs);
+            setCntDamagePanel(newInputs.length);
+        }
+    };
+
+    const handleInputChange = (value, index) => {
+        const newInputs = [...inputs];
+        newInputs[index] = value;
+        setInputs(newInputs);
+    };
+
+    return (
+        <>
+            <button type="button" id="add-panel-btn" onClick={addInput}>
+                Add Damaged Panel
+            </button>
+            <button type="button" id="delete-panel-btn" onClick={deleteInput}>
+                Delete Damage Panel
+            </button>
+            <br />
+            <br />
+            <h3>Total damaged panel: {cntDamagedPanel}</h3>
+            <br />
+
+            {inputs.map((value, index) => (
+                <div key={`panel-${index}`} className="panel-inputs-increment">
+                    <h3 style={{ textAlign: "center" }}>PANEL {index + 1}</h3>
+                    <br />
+                    <label>
+                        Which body panel(s) require repair?
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-secondary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {value.bodyPanel}
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    bodyPanel: "Front Bumper",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Front Bumper
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    bodyPanel: "Rear Bumper",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Rear Bumper
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    bodyPanel: "Side doors",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Side doors
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    bodyPanel: "Rooftop",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Rooftop
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                    <br />
+                    <label>
+                        What type of damage is present on the panel(s)?
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-secondary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {value.damageType}
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageType: "Dent",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Dent
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageType: "Scratch",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Scratch
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageType: "Crack",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Crack
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageType: "Fracture",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Fracture
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageType: "Rust",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Rust
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                    <br />
+                    <label>
+                        Where is the damage located on the panel(s)?
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-secondary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {value.damageLocation}
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation: "Top",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Top
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation: "Bottom",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Bottom
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation:
+                                                        "Upper Middle",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Upper Middle
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation:
+                                                        "Lower Middle",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Lower Middle
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation: "Left",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Left
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageLocation: "Right",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Right
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                    <br />
+                    <label>
+                        How severe is the damage on the panel(s)?:
+                        <div className="dropdown">
+                            <button
+                                className="btn btn-secondary dropdown-toggle"
+                                type="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                            >
+                                {value.damageSeverity}
+                            </button>
+                            <ul className="dropdown-menu">
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageSeverity: "Minor",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Minor
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageSeverity: "Moderate",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Moderate
+                                    </button>
+                                </li>
+                                <li>
+                                    <button
+                                        id="nobtn"
+                                        className="dropdown-item"
+                                        type="button"
+                                        onClick={() =>
+                                            handleInputChange(
+                                                {
+                                                    ...value,
+                                                    damageSeverity: "Severe",
+                                                },
+                                                index
+                                            )
+                                        }
+                                    >
+                                        Severe
+                                    </button>
+                                </li>
+                            </ul>
+                        </div>
+                    </label>
+                    <br />
+                    <label>
+                        Additional remarks:
+                        <input
+                            type={"text"}
+                            placeholder={"Type here..."}
+                            value={value.remarks}
+                            onChange={(event) =>
+                                handleInputChange(
+                                    {
+                                        ...value,
+                                        remarks: event.target.value,
+                                    },
+                                    index
+                                )
+                            }
+                        />
+                    </label>
+                    <br />
+                </div>
+            ))}
+
+            <br />
+            <br />
+        </>
+    );
+};
+
+const FinalizeCustData = (fi) => {
+    const [activePol, setActivePol] = useState("Select");
+    const [polType, setPolType] = useState("Select");
+    const [interestedCust, setInterestCust] = useState("Select");
+
+    return (
+        <>
+            <h3>FINALIZE</h3>
+
+            <br />
+            <label>
+                Customer has active policy:
+                <div className="dropdown">
+                    <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        {activePol}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
+                            <button
+                                id="yesbtn"
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => setActivePol("Yes")}
+                            >
+                                Yes
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                id="nobtn"
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => setActivePol("No")}
+                            >
+                                No
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <input
+                    type="hidden"
+                    id="select-policy"
+                    onChange={fi.setCustPolicy(activePol)}
+                />
+            </label>
+
+            <br />
+            <label>
+                Type of policy:
+                <div className="dropdown">
+                    <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        {polType}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    setPolType("MI");
+                                }}
+                            >
+                                MI
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    setPolType("NON-MI");
+                                }}
+                            >
+                                NON-MI
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <input
+                    type="hidden"
+                    id="select-policy-type"
+                    onChange={fi.setPolicyType(polType)}
+                />
+            </label>
+
+            <br />
+
+            <label>
+                Repair estimate:
+                <input
+                    type="number"
+                    onChange={(e) => {
+                        fi.handleInputChange(e, fi.setRepairEst);
+                    }}
+                />
+            </label>
+            <br />
+
+            <label>
+                Total repair estimate:
+                <input
+                    type="number"
+                    onChange={(e) => {
+                        fi.handleInputChange(e, fi.setTotalRepairEst);
+                    }}
+                />
+            </label>
+            <br />
+
+            <label>
+                Amount payable by customer:
+                <input
+                    type="number"
+                    onChange={(e) => {
+                        fi.handleInputChange(e, fi.setAmtPayable);
+                    }}
+                />
+            </label>
+            <br />
+
+            <label>
+                Customer interested for repair:
+                <div className="dropdown">
+                    <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        {interestedCust}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    setInterestCust("Yes");
+                                }}
+                            >
+                                Yes
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    setInterestCust("No");
+                                }}
+                            >
+                                No
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    setInterestCust("Not Sure");
+                                }}
+                            >
+                                Not sure
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+                <input
+                    id="interested-cust"
+                    type="hidden"
+                    required
+                    onChange={fi.setIsInterested(interestedCust)}
+                />
+            </label>
+            <br />
+        </>
+    );
+};
+
 const ImgPrevComp = (ipc) => {
     return (
         <div className="preview-panel-img my-5">
-            <h3>PREVIEW</h3>
+            <h3>PREVIEW IMAGES</h3>
             <div className="images">
                 {ipc.panelImage &&
                     ipc.panelImage.map((image, index) => {
                         return (
-                            <div className="image" key={image}>
-                                <img
-                                    src={image}
-                                    alt={"panelImgs"}
-                                    height="200"
-                                />
-                                <p>{index + 1}</p>
-                                <button
-                                    type="submit"
-                                    onClick={() => {
-                                        ipc.setPanelImage(
-                                            ipc.panelImage.filter(
-                                                (e) => e !== image
-                                            )
-                                        );
-                                    }}
-                                >
-                                    Delete Image
-                                </button>
-                            </div>
+                            <>
+                                <div className="image" key={image}>
+                                    <img
+                                        src={image}
+                                        alt={"panelImgs"}
+                                        height="200"
+                                    />
+                                    <p>{index + 1}</p>
+                                    <button
+                                        type="submit"
+                                        onClick={() => {
+                                            ipc.setPanelImage(
+                                                ipc.panelImage.filter(
+                                                    (e) => e !== image
+                                                )
+                                            );
+                                        }}
+                                    >
+                                        Delete Image
+                                    </button>
+                                </div>
+                            </>
                         );
                     })}
             </div>
