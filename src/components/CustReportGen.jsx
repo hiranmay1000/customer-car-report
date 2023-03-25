@@ -970,17 +970,6 @@ const FinalizeCustData = (fi) => {
             <br />
 
             <label>
-                Repair estimate:
-                <input
-                    type="number"
-                    onChange={(e) => {
-                        fi.handleInputChange(e, fi.setRepairEst);
-                    }}
-                />
-            </label>
-            <br />
-
-            <label>
                 Total repair estimate:
                 <input
                     type="number"
