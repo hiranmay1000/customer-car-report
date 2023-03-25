@@ -35,6 +35,7 @@ export default function CustReportGen() {
     const [amtPayable, setAmtPayable] = useState(0);
     const [custPolicy, setCustPolicy] = useState("N/A");
     const [policyType, setPolicyType] = useState("N/A");
+    const [insuProvider, setInsuProvider] = useState("N/A");
     const [isInterested, setIsInterested] = useState("N/A");
 
     const [numOfPanels, setNumOfPanels] = useState("");
@@ -63,9 +64,9 @@ export default function CustReportGen() {
             styles: { halign: "left" },
             columnStyles: {
                 0: { fontStyle: "bold" },
-                1: { columnWidth: "auto" },
+                1: { cellWidth: "auto" },
                 2: { fontStyle: "bold" },
-                3: { columnWidth: "auto" },
+                3: { cellWidth: "auto" },
             },
         };
         marutiLogo();
@@ -150,18 +151,30 @@ export default function CustReportGen() {
 
         doc.autoTable(["DAMAGE DETAILS", "", "", ""], damageData, tableConfig2);
 
+        const tableConfigFinalize = {
+            margin: { top: 80 },
+            styles: { halign: "left" },
+            columnStyles: {
+                0: { fontStyle: "bold" },
+                1: { cellWidth: "auto", halign: "right" },
+                2: { fontStyle: "bold" },
+                3: { cellWidth: "auto" },
+            },
+        };
+
         const finalizeData = [
-            ["Customer has active policy: ", custPolicy, "", ""],
-            ["Type of policy ", policyType, "", ""],
-            ["Repair estimate", repairEst, "", ""],
-            ["Total repair estimate ", totalRepairEst, "", ""],
-            ["Amount payble by customer", amtPayable, "", ""],
-            ["Customer interested for repair ", isInterested, "", ""],
+            ["Customer has active policy: ", custPolicy],
+            ["Type of policy ", policyType],
+            ["Name of insurance provider ", insuProvider],
+            ["Repair estimate", repairEst],
+            ["Total repair estimate ", totalRepairEst],
+            ["Amount payble by customer", amtPayable],
+            ["Customer interested for repair ", isInterested],
         ];
         doc.autoTable(
-            ["FINALIZE DETAILS", "", "", ""],
+            ["FINALIZE DETAILS", ""],
             finalizeData,
-            tableConfig
+            tableConfigFinalize
         );
 
         // PDF Page 2
@@ -377,10 +390,12 @@ export default function CustReportGen() {
                         setAmtPayable={setAmtPayable}
                         setCustPolicy={setCustPolicy}
                         setPolicyType={setPolicyType}
+                        setInsuProvider={setInsuProvider}
                         setIsInterested={setIsInterested}
                         custPolicy={custPolicy}
                         policyType={policyType}
                         isInterested={isInterested}
+                        insuProvider={insuProvider}
                     />
 
                     <hr />
@@ -886,7 +901,6 @@ const FinalizeCustData = (fi) => {
     return (
         <>
             <h3>FINALIZE</h3>
-
             <br />
             <label>
                 Customer has active policy:
@@ -927,7 +941,6 @@ const FinalizeCustData = (fi) => {
                     </ul>
                 </div>
             </label>
-
             <br />
             <label>
                 Type of policy:
@@ -966,11 +979,49 @@ const FinalizeCustData = (fi) => {
                     </ul>
                 </div>
             </label>
-
             <br />
-
             <label>
-                Total repair estimate:
+                Name of insurance provider:
+                <div className="dropdown">
+                    <button
+                        className="btn btn-secondary dropdown-toggle"
+                        type="button"
+                        data-bs-toggle="dropdown"
+                        aria-expanded="false"
+                    >
+                        {fi.insuProvider}
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li>
+                            <button
+                                id="yesbtn"
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    fi.setInsuProvider("SBI General");
+                                }}
+                            >
+                                SBI General
+                            </button>
+                        </li>
+                        <li>
+                            <button
+                                id="nobtn"
+                                className="dropdown-item"
+                                type="button"
+                                onClick={() => {
+                                    fi.setInsuProvider("Other");
+                                }}
+                            >
+                                Other
+                            </button>
+                        </li>
+                    </ul>
+                </div>
+            </label>
+            <br />
+            <label>
+            Estimated cost of repair:
                 <input
                     type="number"
                     onChange={(e) => {
@@ -979,9 +1030,8 @@ const FinalizeCustData = (fi) => {
                 />
             </label>
             <br />
-
             <label>
-                Amount payable by customer:
+            Expected cost to be paid by customer after insurnace coverage:
                 <input
                     type="number"
                     onChange={(e) => {
@@ -990,7 +1040,6 @@ const FinalizeCustData = (fi) => {
                 />
             </label>
             <br />
-
             <label>
                 Customer interested for repair:
                 <div className="dropdown">
