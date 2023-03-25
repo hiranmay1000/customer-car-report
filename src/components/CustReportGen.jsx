@@ -41,6 +41,7 @@ export default function CustReportGen() {
     const [panelBody, setPanelBody] = useState("N/A");
     const [panelType, setPanelType] = useState("N/A");
     const [panelLocation, setPanelLocation] = useState("N/A");
+    const [damageSeverity, setDamageSeverity] = useState("N/A");
 
     const [panelImage, setPanelImage] = useState([]);
 
@@ -127,6 +128,12 @@ export default function CustReportGen() {
             [
                 "Where is the damage located on the panel(s)?",
                 panelLocation,
+                "",
+                "",
+            ],
+            [
+                "How severe is the damage on the panel(s)?",
+                damageSeverity,
                 "",
                 "",
             ],
@@ -362,10 +369,13 @@ export default function CustReportGen() {
                     <br />
                     <GetInputs
                         setPanelBody={setPanelBody}
-                        panelBody = {panelBody}
+                        panelBody={panelBody}
                         setPanelType={setPanelType}
-                        panelType = {panelType}
+                        panelType={panelType}
                         setPanelLocation={setPanelLocation}
+                        panelLocation={panelLocation}
+                        setDamageSeverity={setDamageSeverity}
+                        damageSeverity={damageSeverity}
                     />
                     <br />
                     <br />
@@ -432,7 +442,7 @@ const GetInputs = (gi) => {
             setInputs([
                 ...inputs,
                 {
-                    bodyPanel: "Select",
+                    bodyPanel: "",
                     damageType: "Select",
                     damageLocation: "Select",
                     damageSeverity: "Select",
@@ -498,7 +508,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: gi.setPanelBody("Front Bumper"),
+                                                    bodyPanel:
+                                                        gi.setPanelBody(
+                                                            "Front Bumper"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -515,7 +528,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: gi.setPanelBody("Rear Bumper"),
+                                                    bodyPanel:
+                                                        gi.setPanelBody(
+                                                            "Rear Bumper"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -533,7 +549,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: gi.setPanelBody("Side door"),
+                                                    bodyPanel:
+                                                        gi.setPanelBody(
+                                                            "Side door"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -551,7 +570,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    bodyPanel: gi.setPanelBody("Rooftop"),
+                                                    bodyPanel:
+                                                        gi.setPanelBody(
+                                                            "Rooftop"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -584,7 +606,8 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: gi.setPanelType("Dent"),
+                                                    damageType:
+                                                        gi.setPanelType("Dent"),
                                                 },
                                                 index
                                             )
@@ -601,7 +624,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: gi.setPanelType("Scratch"),
+                                                    damageType:
+                                                        gi.setPanelType(
+                                                            "Scratch"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -619,7 +645,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: gi.setPanelType("Crack"),
+                                                    damageType:
+                                                        gi.setPanelType(
+                                                            "Crack"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -637,7 +666,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: gi.setPanelType("Fracture"),
+                                                    damageType:
+                                                        gi.setPanelType(
+                                                            "Fracture"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -655,7 +687,8 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageType: gi.setPanelType("Rust"),
+                                                    damageType:
+                                                        gi.setPanelType("Rust"),
                                                 },
                                                 index
                                             )
@@ -677,7 +710,7 @@ const GetInputs = (gi) => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {value.damageLocation}
+                                {gi.panelLocation}
                             </button>
                             <ul className="dropdown-menu">
                                 <li>
@@ -688,7 +721,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageLocation: "Top",
+                                                    damageLocation:
+                                                        gi.setPanelLocation(
+                                                            "Top"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -705,7 +741,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageLocation: "Bottom",
+                                                    damageLocation:
+                                                        gi.setPanelLocation(
+                                                            "Bottom"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -724,7 +763,9 @@ const GetInputs = (gi) => {
                                                 {
                                                     ...value,
                                                     damageLocation:
-                                                        "Upper Middle",
+                                                        gi.setPanelLocation(
+                                                            "Upper Middle"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -743,7 +784,9 @@ const GetInputs = (gi) => {
                                                 {
                                                     ...value,
                                                     damageLocation:
-                                                        "Lower Middle",
+                                                        gi.setPanelLocation(
+                                                            "Lower Middle"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -761,7 +804,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageLocation: "Left",
+                                                    damageLocation:
+                                                        gi.setPanelLocation(
+                                                            "Left"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -779,7 +825,10 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageLocation: "Right",
+                                                    damageLocation:
+                                                        gi.setPanelLocation(
+                                                            "Right"
+                                                        ),
                                                 },
                                                 index
                                             )
@@ -801,7 +850,7 @@ const GetInputs = (gi) => {
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                             >
-                                {value.damageSeverity}
+                                {gi.damageSeverity}
                             </button>
                             <ul className="dropdown-menu">
                                 <li>
@@ -812,7 +861,7 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageSeverity: "Minor",
+                                                    damageSeverity: gi.setDamageSeverity("Minor"),
                                                 },
                                                 index
                                             )
@@ -829,7 +878,7 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageSeverity: "Moderate",
+                                                    damageSeverity: gi.setDamageSeverity("Moderate"),
                                                 },
                                                 index
                                             )
@@ -847,7 +896,7 @@ const GetInputs = (gi) => {
                                             handleInputChange(
                                                 {
                                                     ...value,
-                                                    damageSeverity: "Severe",
+                                                    damageSeverity: gi.setDamageSeverity("Severe"),
                                                 },
                                                 index
                                             )

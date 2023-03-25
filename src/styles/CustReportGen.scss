@@ -49,30 +49,38 @@ body {
             border-radius: 5px;
             border: none;
             padding: 8px 12px;
-            background-image: linear-gradient(to left, #93dd93, #a6f0a6);
-
+            background-color: #327032;
+            color: #92f392;
+            
             &:hover {
-                background-image: linear-gradient(to left, #b5eeb5, #8fcf8f);
+                background-color: #104b10;
+                box-shadow: 0px 0px 10px #041604;
             }
         }
 
         #delete-panel-btn {
-            background-color: #fda5a5;
-            background-image: linear-gradient(to left, #fda5a5, #ec8989);
-
+            background-color: #fd5050;
+            color: #f8e0e0;
+            
             &:hover {
-                background-image: linear-gradient(to left, #ec8989, #fda5a5);
+                background-color: #fa2c2c;
+                box-shadow: 0px 0px 10px #690303;
             }
         }
     }
 }
 
 .panel-inputs-increment {
-    background-color: #94b2ce;
+    background-color: #0d1f30;
     box-shadow: 0px 0px 25px #22404e;
     padding: 40px;
     border-radius: 20px;
     margin-bottom: 50px;
+
+    label{
+        color: #8a9ca5 !important;
+    }
+
 }
 
 .preview-panel-img {
