@@ -13,7 +13,8 @@ code {
 }
 
 .dropdown{
-  width: 40%;
+  min-width: 40%;
+  margin-left: 10px;
 
   button{
     width: 100%;

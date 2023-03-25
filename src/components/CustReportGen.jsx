@@ -34,8 +34,8 @@ export default function CustReportGen() {
     const [totalRepairEst, setTotalRepairEst] = useState(0);
     const [amtPayable, setAmtPayable] = useState(0);
     const [custPolicy, setCustPolicy] = useState("N/A");
-    const [policyType, setPolicyType] = useState("");
-    const [isInterested, setIsInterested] = useState("");
+    const [policyType, setPolicyType] = useState("N/A");
+    const [isInterested, setIsInterested] = useState("N/A");
 
     const [numOfPanels, setNumOfPanels] = useState("");
     const [panelDetails, setPanelDetails] = useState("");
@@ -379,6 +379,8 @@ export default function CustReportGen() {
                         setPolicyType={setPolicyType}
                         setIsInterested={setIsInterested}
                         custPolicy={custPolicy}
+                        policyType={policyType}
+                        isInterested={isInterested}
                     />
 
                     <hr />
@@ -881,10 +883,6 @@ const GetInputs = () => {
 };
 
 const FinalizeCustData = (fi) => {
-    const [activePol, setActivePol] = useState("Select");
-    const [polType, setPolType] = useState("Select");
-    const [interestedCust, setInterestCust] = useState("Select");
-
     return (
         <>
             <h3>FINALIZE</h3>
@@ -899,7 +897,7 @@ const FinalizeCustData = (fi) => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        {activePol}
+                        {fi.custPolicy}
                     </button>
                     <ul className="dropdown-menu">
                         <li>
@@ -907,7 +905,9 @@ const FinalizeCustData = (fi) => {
                                 id="yesbtn"
                                 className="dropdown-item"
                                 type="button"
-                                onClick={() => setActivePol("Yes")}
+                                onClick={() => {
+                                    fi.setCustPolicy("Yes");
+                                }}
                             >
                                 Yes
                             </button>
@@ -917,18 +917,15 @@ const FinalizeCustData = (fi) => {
                                 id="nobtn"
                                 className="dropdown-item"
                                 type="button"
-                                onClick={() => setActivePol("No")}
+                                onClick={() => {
+                                    fi.setCustPolicy("No");
+                                }}
                             >
                                 No
                             </button>
                         </li>
                     </ul>
                 </div>
-                <input
-                    type="hidden"
-                    id="select-policy"
-                    onChange={fi.setCustPolicy(activePol)}
-                />
             </label>
 
             <br />
@@ -941,7 +938,7 @@ const FinalizeCustData = (fi) => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        {polType}
+                        {fi.policyType}
                     </button>
                     <ul className="dropdown-menu">
                         <li>
@@ -949,7 +946,7 @@ const FinalizeCustData = (fi) => {
                                 className="dropdown-item"
                                 type="button"
                                 onClick={() => {
-                                    setPolType("MI");
+                                    fi.setPolicyType("MI");
                                 }}
                             >
                                 MI
@@ -960,7 +957,7 @@ const FinalizeCustData = (fi) => {
                                 className="dropdown-item"
                                 type="button"
                                 onClick={() => {
-                                    setPolType("NON-MI");
+                                    fi.setPolicyType("NON-MI");
                                 }}
                             >
                                 NON-MI
@@ -968,11 +965,6 @@ const FinalizeCustData = (fi) => {
                         </li>
                     </ul>
                 </div>
-                <input
-                    type="hidden"
-                    id="select-policy-type"
-                    onChange={fi.setPolicyType(polType)}
-                />
             </label>
 
             <br />
@@ -1019,7 +1011,7 @@ const FinalizeCustData = (fi) => {
                         data-bs-toggle="dropdown"
                         aria-expanded="false"
                     >
-                        {interestedCust}
+                        {fi.isInterested}
                     </button>
                     <ul className="dropdown-menu">
                         <li>
@@ -1027,7 +1019,7 @@ const FinalizeCustData = (fi) => {
                                 className="dropdown-item"
                                 type="button"
                                 onClick={() => {
-                                    setInterestCust("Yes");
+                                    fi.setIsInterested("Yes");
                                 }}
                             >
                                 Yes
@@ -1038,7 +1030,7 @@ const FinalizeCustData = (fi) => {
                                 className="dropdown-item"
                                 type="button"
                                 onClick={() => {
-                                    setInterestCust("No");
+                                    fi.setIsInterested("No");
                                 }}
                             >
                                 No
@@ -1049,7 +1041,7 @@ const FinalizeCustData = (fi) => {
                                 className="dropdown-item"
                                 type="button"
                                 onClick={() => {
-                                    setInterestCust("Not Sure");
+                                    fi.setIsInterested("Not Sure");
                                 }}
                             >
                                 Not sure
@@ -1057,12 +1049,6 @@ const FinalizeCustData = (fi) => {
                         </li>
                     </ul>
                 </div>
-                <input
-                    id="interested-cust"
-                    type="hidden"
-                    required
-                    onChange={fi.setIsInterested(interestedCust)}
-                />
             </label>
             <br />
         </>
