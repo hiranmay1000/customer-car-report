@@ -1,0 +1,25 @@
+.logo-banner {
+    overflow: hidden;
+    border-radius: 20px;
+    
+    .logo-scroller {
+        height: 50px;
+        display: flex;
+        position: relative;
+        animation: slideLogos 45s linear infinite;
+
+        img {
+            padding: 0 25px;
+            background: 50%;
+        }
+    }
+}
+
+@keyframes slideLogos {
+    from {
+        left: 1050px;
+    }
+    to {
+        left: -3900px;
+    }
+}

@@ -5,7 +5,7 @@ import "jspdf-autotable";
 import msLogo from "../imgs/ms-logo.jpg";
 import FinalizeCustData from "./FinalizeCustData";
 import ImgPrevComp from "./ImgPrevComp";
-// import msHeroLogo from "../imgs/ms-applogo.png";
+import LogoBanner from "./LogoBanner";
 
 export default function CustReportGen(main) {
     const today = new Date();
@@ -49,7 +49,7 @@ export default function CustReportGen(main) {
     };
 
     const doc = new jsPDF("portrait", "px", "a4", "false");
-    const handleSubmit =  (e) => {
+    const handleSubmit = (e) => {
         e.preventDefault();
 
         // Configure table layout and styling
@@ -159,6 +159,7 @@ export default function CustReportGen(main) {
             ["Customer has active policy ", custPolicy],
             ["Type of policy ", policyType],
             ["Name of insurance provider ", insuProvider],
+            ["Total damaged panel", cntDamagedPanel],
             ["Total repair estimate ", totalRepairEst],
             ["Amount payble by customer", amtPayable],
             ["Customer interested for repair ", isInterested],
@@ -178,14 +179,7 @@ export default function CustReportGen(main) {
         // var cnt = 0;
         for (let i = 0; i < panelImage.length; i++) {
             doc.addPage();
-            doc.addImage(
-                panelImage[i],
-                "JPEG",
-                30,
-                60,
-                180,
-                100
-            );
+            doc.addImage(panelImage[i], "JPEG", 30, 60, 180, 100);
         }
 
         doc.save("customer-report.pdf");
@@ -280,6 +274,7 @@ export default function CustReportGen(main) {
                                     )
                                 }
                             >
+                                <option>Select</option>
                                 <option>Dent </option>
                                 <option>Scratch</option>
                                 <option>Crack</option>
@@ -503,12 +498,6 @@ export default function CustReportGen(main) {
                     <div>
                         <form>{renderpanels()}</form>
                     </div>
-                    <div>Total: {cntDamagedPanel}</div>
-                    <h5>
-                        Body Panels-:
-                        {panelData.map((panel) => JSON.stringify(panel))}
-                        <br />
-                    </h5>
 
                     <br />
                     <br />
@@ -552,6 +541,8 @@ export default function CustReportGen(main) {
                     <br />
                     <Button type="submit">Generate Report</Button>
                 </form>
+
+                <LogoBanner/>
             </div>
         </>
     );
