@@ -26,45 +26,45 @@ body {
             font-size: large;
             color: #193b4b;
 
-            input {
+            input, select {
+                max-height: 42px;
                 border: none;
                 border-radius: 5px;
                 outline: none;
                 min-width: 40%;
                 padding: 5px 10px;
-                background-color: #fff;
-
+                background-color: #dce4f3;
+                
                 &:hover {
-                    background-color: #c4d1eb;
+                    background-color: #fff;
                 }
             }
         }
 
         #add-panel-btn,
         #delete-panel-btn {
-            margin-right: 5px;
+            margin-right: 7px;
             margin-bottom: 5px;
-            background-color: #b3e6b3;
             cursor: pointer;
             border-radius: 5px;
             border: none;
-            padding: 8px 12px;
-            background-color: #327032;
-            color: #92f392;
-            
+            padding: 7px 10px;
+            background-color: #1c5494;
+            color: #c4e0ff;
+            box-shadow: 0px 0px 12px #000000;
+
             &:hover {
-                background-color: #104b10;
-                box-shadow: 0px 0px 10px #041604;
+                background-color: #0b77f3;
             }
         }
 
         #delete-panel-btn {
-            background-color: #fd5050;
+            background-color: #a52d2d;
             color: #f8e0e0;
-            
+            box-shadow: 0px 0px 12px #0e0000;
+
             &:hover {
-                background-color: #fa2c2c;
-                box-shadow: 0px 0px 10px #690303;
+                background-color: #d31c1c;
             }
         }
     }
@@ -77,10 +77,9 @@ body {
     border-radius: 20px;
     margin-bottom: 50px;
 
-    label{
+    label {
         color: #8a9ca5 !important;
     }
-
 }
 
 .preview-panel-img {
