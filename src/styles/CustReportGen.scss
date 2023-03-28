@@ -26,15 +26,17 @@ body {
             font-size: large;
             color: #193b4b;
 
-            input, select {
+            input,
+            select {
+                display:unset;
                 max-height: 42px;
                 border: none;
                 border-radius: 5px;
                 outline: none;
-                min-width: 40%;
+                width: 40%;
                 padding: 5px 10px;
                 background-color: #dce4f3;
-                
+
                 &:hover {
                     background-color: #fff;
                 }
@@ -44,7 +46,7 @@ body {
         #add-panel-btn,
         #delete-panel-btn {
             margin-right: 7px;
-            margin-bottom: 5px;
+            margin-bottom: 10px;
             cursor: pointer;
             border-radius: 5px;
             border: none;
@@ -116,24 +118,40 @@ body {
     }
 }
 
+.hero-logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-size: contain;
 
+    img {
+        height: 100px;
+    }
+}
 
-@media screen and (max-width: 600px) {
+@media screen and (max-width: 700px) {
     .customer-input {
         width: 95%;
         padding: 60px 20px;
+        border-radius: 25px;
 
         form {
             label {
+                font-size: 15px;
                 input {
-                    min-width: 50%;
-                    max-height: 43px;
+                    width: 170px;
+                    height: 35px;
                     padding: 5px 10px;
-                    background-color: #fff;
-
+                    background-color: #eff8ff;
+                    
                     &:hover {
-                        background-color: #dadada;
+                        background-color: #fff;
                     }
+                }
+
+                select{
+                    min-width: 170px;
                 }
             }
         }
@@ -143,7 +161,13 @@ body {
         padding: 15px;
     }
     .dropdown {
-        min-width: 45%;
+        min-width: 170px;
         margin-left: 15px;
+    }
+
+    .hero-logo {
+        img {
+            height: 50px;
+        }
     }
 }

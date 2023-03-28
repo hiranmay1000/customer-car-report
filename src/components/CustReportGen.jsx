@@ -3,11 +3,12 @@ import { Button } from "react-bootstrap";
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import msLogo from "../imgs/ms-logo.jpg";
+import msLogoHead from "../imgs/ms-logo-png-v.png";
 import FinalizeCustData from "./FinalizeCustData";
 import ImgPrevComp from "./ImgPrevComp";
 import LogoBanner from "./LogoBanner";
 
-export default function CustReportGen(main) {
+export default function CustReportGen() {
     const today = new Date();
     const yyyy = today.getFullYear();
     let mm = today.getMonth() + 1; // Months start at 0!
@@ -15,11 +16,11 @@ export default function CustReportGen(main) {
 
     if (dd < 10) dd = "0" + dd;
     if (mm < 10) mm = "0" + mm;
-    const currDate = dd + "-" + mm + "-" + yyyy;
+    const defCurrDate = dd + "-" + mm + "-" + yyyy;
 
     const [dealerName, setDealerName] = useState("Bhandari Auto");
     const [dealerLocation, setDealerLocation] = useState("Kolkata");
-    const [dealerDate, setDealerDate] = useState(currDate);
+    const [dealerDate, setDealerDate] = useState(defCurrDate);
 
     const [customerName, setCustomerName] = useState("");
     const [customerMobile, setCustomerMobile] = useState("");
@@ -84,9 +85,9 @@ export default function CustReportGen(main) {
         const tableConfigVehicle = {
             columnStyles: {
                 0: { fontStyle: "bold" },
-                1: { columnWidth: "auto" },
+                1: { cellWidth: "auto" },
                 2: { fontStyle: "bold" },
-                3: { columnWidth: "auto" },
+                3: { cellWidth: "auto" },
             },
         };
 
@@ -139,7 +140,7 @@ export default function CustReportGen(main) {
             },
             columnStyles: {
                 0: { fontStyle: "bold" },
-                1: { columnWidth: "auto" },
+                1: { cellWidth: "auto" },
                 2: { fontStyle: "bold" },
             },
         };
@@ -242,11 +243,11 @@ export default function CustReportGen(main) {
 
     const renderpanels = () => {
         return panels.map((panel, index) => (
-            <>
+            <React.Fragment key={index}>
                 <div className="panel-inputs-increment">
                     <h3 style={{ textAlign: "center" }}>PANEL {index + 1}</h3>
                     <br />
-                    <div key={panel}>
+                    <div>
                         <br />
                         <label>
                             Which body panel(s) require repair?
@@ -262,10 +263,9 @@ export default function CustReportGen(main) {
                             />
                         </label>
                         <br />
-                        <label htmlFor="">
+                        <label>
                             What type of damage is present on the panel(s)?
                             <select
-                                value={panel.damageType}
                                 onChange={(e) =>
                                     handleInputChange2(
                                         e.target.value,
@@ -274,7 +274,7 @@ export default function CustReportGen(main) {
                                     )
                                 }
                             >
-                                <option>Select</option>
+                                <option value={"Select"}>Select</option>
                                 <option>Dent </option>
                                 <option>Scratch</option>
                                 <option>Crack</option>
@@ -286,7 +286,6 @@ export default function CustReportGen(main) {
                         <label htmlFor="">
                             Damage severity:
                             <select
-                                value={panel.damageSeverity}
                                 onChange={(e) =>
                                     handleInputChange2(
                                         e.target.value,
@@ -303,7 +302,7 @@ export default function CustReportGen(main) {
                         </label>{" "}
                         <br />
                         <label>
-                            Remarks:
+                            Remarks: &nbsp; &nbsp;
                             <input
                                 type="text"
                                 onChange={(e) => {
@@ -319,8 +318,19 @@ export default function CustReportGen(main) {
                         <br />
                     </div>
                 </div>
-            </>
+            </React.Fragment>
         ));
+    };
+
+    const handleDateFormat = (date) => {
+        const breakDate = date.split("-");
+        let yyyy = breakDate[0];
+        let mm = breakDate[1];
+        let dd = breakDate[2];
+
+        const formattedDate = dd + "-" + mm + "-" + yyyy;
+        console.log(formattedDate);
+        return formattedDate;
     };
 
     return (
@@ -328,7 +338,9 @@ export default function CustReportGen(main) {
             <br />
             <br />
             <div className="customer-input">
-                <h1>FILL THE FORM</h1>
+                <div className="hero-logo">
+                    <img src={msLogoHead} alt="Maruti Suzuki" />
+                </div>
                 <br />
                 <form onSubmit={handleSubmit} spellCheck={"false"}>
                     <hr />
@@ -361,10 +373,10 @@ export default function CustReportGen(main) {
                         Dealer Date:
                         <input
                             type="date"
-                            value={dealerDate}
-                            min="1970-01-01"
                             onChange={(e) =>
-                                handleInputChange(e, setDealerDate)
+                                setDealerDate(
+                                    handleDateFormat(e.target.value)
+                                )
                             }
                         />
                     </label>
@@ -448,23 +460,24 @@ export default function CustReportGen(main) {
                     </label>
                     <br />
                     <label>
-                        Sale Date:
-                        <input
-                            type="date"
-                            value={vehicleSaleDate}
-                            onChange={(e) =>
-                                handleInputChange(e, setVehicleSaleDate)
-                            }
-                        />
-                    </label>
-                    <br />
-                    <label>
                         Chassis Number:
                         <input
                             type="text"
                             value={vehicleChassisNo}
                             onChange={(e) =>
                                 handleInputChange(e, setVehicleChassisNo)
+                            }
+                        />
+                    </label>
+                    <br />
+                    <label>
+                        Sale Date:
+                        <input
+                            type="date"
+                            onChange={(e) =>
+                                setVehicleSaleDate(
+                                    handleDateFormat(e.target.value)
+                                )
                             }
                         />
                     </label>
@@ -490,13 +503,14 @@ export default function CustReportGen(main) {
                     <br />
                     <h3>Total damaged panel: {cntDamagedPanel}</h3>
                     <br />
-
-                    {/* <button onClick={addPanel}>Add panel</button>
-                <button onClick={deletePanel}>Delete panel</button> */}
                     <br />
                     <br />
                     <div>
-                        <form>{renderpanels()}</form>
+                        <div>{renderpanels()}</div>
+                        {/* <h5>
+                            Input:
+                            {panelData.map((panel) => JSON.stringify(panel))}
+                        </h5> */}
                     </div>
 
                     <br />
@@ -542,7 +556,7 @@ export default function CustReportGen(main) {
                     <Button type="submit">Generate Report</Button>
                 </form>
 
-                <LogoBanner/>
+                <LogoBanner />
             </div>
         </>
     );
