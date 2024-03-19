@@ -44,7 +44,6 @@ export default function FinalizeCustData(fi) {
                     </ul>
                 </div>
             </label>
-            <br />
             <label>
                 Type of policy:
                 <div className="dropdown">
@@ -82,7 +81,6 @@ export default function FinalizeCustData(fi) {
                     </ul>
                 </div>
             </label>
-            <br />
             <label>
                 Name of insurance provider:
                 <div className="dropdown">
@@ -122,7 +120,6 @@ export default function FinalizeCustData(fi) {
                     </ul>
                 </div>
             </label>
-            <br />
             <label>
                 Estimated cost of repair:
                 <input
@@ -132,7 +129,6 @@ export default function FinalizeCustData(fi) {
                     }}
                 />
             </label>
-            <br />
             <label>
                 Expected cost to be paid by customer after insurnace coverage:
                 <input
@@ -142,7 +138,6 @@ export default function FinalizeCustData(fi) {
                     }}
                 />
             </label>
-            <br />
             <label>
                 Customer interested for repair:
                 <div className="dropdown">

@@ -50,8 +50,10 @@ export default function CustReportGen() {
  
 
     const handleInputChange = (e, setter) => {
+        // let val = e.target.value.toUpperCase(); // Using built-in function to convert to uppercase
         setter(e.target.value);
     };
+    
 
     const marutiLogo = (doc) => {
         doc.addImage(msLogo, 30, 15, 85, 18);
@@ -343,7 +345,6 @@ export default function CustReportGen() {
                                 }}
                             />
                         </label>
-                        <br />
                         <label>
                             What type of damage is present on the panel(s)?
                             <select
@@ -363,7 +364,6 @@ export default function CustReportGen() {
                                 <option>Rust</option>
                             </select>
                         </label>
-                        <br />
                         <label htmlFor="">
                             Damage severity:
                             <select
@@ -381,7 +381,6 @@ export default function CustReportGen() {
                                 <option>Severe</option>
                             </select>
                         </label>{" "}
-                        <br />
                         <label>
                             Remarks: &nbsp; &nbsp;
                             <input
@@ -395,7 +394,6 @@ export default function CustReportGen() {
                                 }}
                             />
                         </label>
-                        <br />
                         <br />
                     </div>
                 </div>
@@ -438,7 +436,6 @@ export default function CustReportGen() {
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Dealer Location:
                         <input
@@ -449,7 +446,6 @@ export default function CustReportGen() {
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Dealer Date:
                         <input
@@ -469,13 +465,12 @@ export default function CustReportGen() {
                         <input
                             type="text"
                             value={customerName}
-                            placeholder={"Anup Mahato"}
+                            placeholder={"Full name"}
                             onChange={(e) =>
                                 handleInputChange(e, setCustomerName)
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Customer Mobile:
                         <input
@@ -487,7 +482,6 @@ export default function CustReportGen() {
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Customer Email:
                         <input
@@ -507,37 +501,30 @@ export default function CustReportGen() {
                     <label>
                         Vehicle Registration Number:
                         <input
-                            type="text"
-                            value={vehicleRegNo}
+                            type="text" value={vehicleRegNo} placeholder="WB66T5888"
                             onChange={(e) =>
                                 handleInputChange(e, setVehicleRegNo)
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Vehicle Model:
                         <input
-                            type="text"
-                            value={vehicleModel}
+                            type="text" value={vehicleModel} placeholder="Dezire ZXI+"
                             onChange={(e) =>
                                 handleInputChange(e, setVehicleModel)
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Odometer Reading:
                         <input
                             type="number"
-                            value={odoReading}
-                            placeholder={"In Km"}
-                            onChange={(e) =>
+                            value={odoReading} placeholder={"In Km"} onChange={(e) =>
                                 handleInputChange(e, setOdoReading)
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Chassis Number:
                         <input
@@ -548,7 +535,6 @@ export default function CustReportGen() {
                             }
                         />
                     </label>
-                    <br />
                     <label>
                         Sale Date:
                         <input
@@ -607,6 +593,7 @@ export default function CustReportGen() {
                     <hr />
                     <br />
                     <h3>UPLOAD IMAGES</h3>
+                    <p><strong>Note: </strong>Please upload images in landscape mode only</p>
                     <br />
                     <label>
                         Panel Image:
