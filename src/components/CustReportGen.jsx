@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { Button } from "react-bootstrap";
+import Tippy from "@tippyjs/react";
+import "tippy.js/dist/tippy.css"; // optional
 import jsPDF from "jspdf";
 import "jspdf-autotable";
 import msLogo from "../imgs/ms-logo.jpg";
@@ -7,6 +9,7 @@ import msLogoHead from "../imgs/ms-logo-png-v.png";
 import FinalizeCustData from "./FinalizeCustData";
 import ImgPrevComp from "./ImgPrevComp";
 import LogoBanner from "./LogoBanner";
+import Footer from "./Footer";
 
 export default function CustReportGen() {
     const today = new Date();
@@ -40,19 +43,19 @@ export default function CustReportGen() {
     const [isInterested, setIsInterested] = useState("N/A");
 
     const [panelImage, setPanelImage] = useState([]);
+ 
 
     const handleInputChange = (e, setter) => {
         setter(e.target.value);
     };
 
-    const marutiLogo = () => {
+    const marutiLogo = (doc) => {
         doc.addImage(msLogo, 30, 15, 85, 18);
     };
 
-    const doc = new jsPDF("portrait", "px", "a4", "false");
-    const handleSubmit = (e) => {
-        e.preventDefault();
 
+
+    const addDetailsToPdf = (doc) => {
         // Configure table layout and styling
         const tableConfig = {
             margin: { top: 80 },
@@ -64,7 +67,8 @@ export default function CustReportGen() {
                 3: { cellWidth: "auto" },
             },
         };
-        marutiLogo();
+
+        marutiLogo(doc);
         doc.setFontSize(12);
         doc.text(370, 28, dealerDate);
         doc.setFontSize(15);
@@ -170,21 +174,94 @@ export default function CustReportGen() {
             finalizeData,
             tableConfigFinalize
         );
+    }
 
-        // IMAGE PAGE
-        // const PAGE_WIDTH = 595; // A4 page width in pixels
-        // const PAGE_HEIGHT = 841; // A4 page height in pixels
-        // const MAX_IMAGE_WIDTH = PAGE_WIDTH - 60; // Maximum width available for the image on the page
-        // const MAX_IMAGE_HEIGHT = PAGE_HEIGHT - 60; // Maximum height available for the image on the page
 
-        // var cnt = 0;
+    const addImagesToPdf = async (mydoc) => {
+        // const mydoc = new jsPDF("portrait", "px", "a4", "false");
+        let x = 0; // Current x-coordinate for the image
+        let y = 0; // Current y-coordinate for the image
+        const pageWidth = mydoc.internal.pageSize.getWidth();
+        const pageHeight = mydoc.internal.pageSize.getHeight();
+
         for (let i = 0; i < panelImage.length; i++) {
-            doc.addPage();
-            doc.addImage(panelImage[i], "JPEG", 30, 60, 180, 100);
+            const img = new Image();
+            img.src = panelImage[i];
+            await new Promise((resolve) => {
+                img.onload = () => resolve();
+            });
+
+            const isLandscape = img.width > img.height;
+
+            let width, height, rotation;
+            if (isLandscape) {
+                width = pageWidth / 2; // Adjust image width for landscape pictures
+                height = (img.height * width) / img.width;
+                rotation = 0; // No rotation needed for landscape images
+            } else {
+                width = pageWidth / 2; // Adjust image width for portrait pictures
+                height = (img.height * width) / img.width;
+                // rotation = -90; /// Rotate portrait images by 90 degrees
+            }
+
+            // Check if there is enough space on the current line for the image
+            if (x + width > pageWidth) {
+                // Move to the next line
+                x = 0;
+                y += height;
+                
+                // Check if the image exceeds the page height
+                if (y + height > pageHeight) {
+                    mydoc.addPage(); // Add a new page if not enough space
+                    x = 0; // Reset x-coordinate for the new page
+                    y = 0; // Reset y-coordinate for the new page
+                }
+            }
+
+            // Add the image to the mydocument with border space
+            const borderSpace = 5; // Adjust border space as needed
+            if (rotation === -90) {
+                // Shift the x-coordinate for rotated images to avoid overlap
+                mydoc.addImage(img, "JPEG", x + borderSpace, y +  borderSpace, height - 2 * borderSpace, width - 2 * borderSpace, '', 'FAST', rotation);
+            } else {
+                mydoc.addImage(img, "JPEG", x + borderSpace, y + borderSpace, width - 2 * borderSpace, height - 2 * borderSpace, '', 'FAST', rotation);
+            }
+            
+            // Update x-coordinate for the next image
+            x += width;
+
+            // If there are more images and space is still available, add a new page
+            if (i !== panelImage.length - 1 && y + height > pageHeight) {
+                mydoc.addPage();
+                x = 0; // Reset x-coordinate for the new page
+                y = 0; // Reset y-coordinate for the new page
+            }
         }
 
-        doc.save("customer-report.pdf");
+        mydoc.save("images");
+
     };
+
+
+
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const doc = new jsPDF("portrait", "px", "a4", "false");
+
+        // add details
+        addDetailsToPdf(doc);
+
+        // add images
+        if (panelImage.length > 0) {
+            doc.addPage();
+            addImagesToPdf(doc);
+        }
+
+        // doc.save("customer-report.pdf");
+    };
+
+
 
     const onSelectImgFile = (e) => {
         const selectedFiles = e.target.files;
@@ -374,9 +451,7 @@ export default function CustReportGen() {
                         <input
                             type="date"
                             onChange={(e) =>
-                                setDealerDate(
-                                    handleDateFormat(e.target.value)
-                                )
+                                setDealerDate(handleDateFormat(e.target.value))
                             }
                         />
                     </label>
@@ -553,11 +628,15 @@ export default function CustReportGen() {
                         setPanelImage={setPanelImage}
                     />
                     <br />
-                    <Button type="submit">Generate Report</Button>
+                    <Tippy content="Download PDF">
+                        <Button type="submit">Generate Report</Button>
+                    </Tippy>
                 </form>
 
                 <LogoBanner />
             </div>
+
+            <Footer />
         </>
     );
 }

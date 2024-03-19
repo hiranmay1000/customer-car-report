@@ -1,0 +1,39 @@
+.footer {
+    width: 100%;
+    height: 450px;
+    background-color: #151e50;
+    border-radius: 100px 100px 0 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    text-align: center;
+
+    .dev-mess {
+        h3,
+        a {
+            color: #c2c2c2;
+        }
+        a {
+            text-decoration: none;
+            color: #b4cde3;
+            svg {
+                color: #ff3131;
+                font-size: 21px;
+
+            }
+            &:hover {
+                color: #9e9797;
+                svg{
+                    color: #b60b0b;
+                }
+            }
+        }
+    }
+
+    .total-vistor{
+        color: #b4cde3;
+        font-style: italic;
+
+    }
+}
