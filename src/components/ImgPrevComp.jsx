@@ -4,6 +4,7 @@ export default function ImgPrevComp(ipc) {
     return (
         <div className="preview-panel-img my-5">
             <h3>PREVIEW IMAGES</h3>
+            <br />
             <div className="images">
                 {ipc.panelImage &&
                     ipc.panelImage.map((image, index) => {

@@ -26,10 +26,14 @@ body {
             font-size: large;
             color: #193b4b;
 
+            #image-upload-box{
+                max-height: 50px;
+            }
+
             input,
             select {
                 display: unset;
-                max-height: 42px;
+                height: 40px;
                 border: none;
                 border-radius: 5px;
                 outline: none;
@@ -43,10 +47,23 @@ body {
             }
         }
 
+        #add-rmv-panel-btn{
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            button{
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                height: 45px;
+                width: 110px;
+                margin: 0 7px;
+            }
+        }
+
         #add-panel-btn,
         #delete-panel-btn {
-            margin-right: 7px;
-            margin-bottom: 10px;
             cursor: pointer;
             border-radius: 5px;
             border: none;
@@ -73,6 +90,12 @@ body {
         .custom-tooltip {
             --bs-tooltip-bg: var(--bs-primary);
         }
+    }
+
+    #gen-report-btn-container{
+        display: flex;
+        align-items: center;
+        justify-content: center;
     }
 }
 

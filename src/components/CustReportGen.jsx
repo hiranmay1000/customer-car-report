@@ -10,6 +10,10 @@ import FinalizeCustData from "./FinalizeCustData";
 import ImgPrevComp from "./ImgPrevComp";
 import LogoBanner from "./LogoBanner";
 import Footer from "./Footer";
+import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+
+
+
 
 export default function CustReportGen() {
     const today = new Date();
@@ -219,7 +223,7 @@ export default function CustReportGen() {
             }
 
             // Add the image to the mydocument with border space
-            const borderSpace = 5; // Adjust border space as needed
+            const borderSpace = 7; // Adjust border space as needed
             if (rotation === -90) {
                 // Shift the x-coordinate for rotated images to avoid overlap
                 mydoc.addImage(img, "JPEG", x + borderSpace, y +  borderSpace, height - 2 * borderSpace, width - 2 * borderSpace, '', 'FAST', rotation);
@@ -562,24 +566,6 @@ export default function CustReportGen() {
                     <br />
                     <h3>PANEL DETAILS</h3>
                     <br />
-                    {/* <GetInputs /> */}
-
-                    <button type="button" id="add-panel-btn" onClick={addPanel}>
-                        Add Damage Panel
-                    </button>
-                    <button
-                        type="button"
-                        id="delete-panel-btn"
-                        onClick={deletePanel}
-                    >
-                        Delete Damage Panel
-                    </button>
-                    <br />
-                    <br />
-                    <h3>Total damaged panel: {cntDamagedPanel}</h3>
-                    <br />
-                    <br />
-                    <br />
                     <div>
                         <div>{renderpanels()}</div>
                         {/* <h5>
@@ -588,9 +574,19 @@ export default function CustReportGen() {
                         </h5> */}
                     </div>
 
-                    <br />
-                    <br />
+                    <div id="add-rmv-panel-btn">
+                        <button type="button" id="delete-panel-btn" onClick={deletePanel}>
+                            <FaMinusCircle />
+                        </button>
+                        <button type="button" id="add-panel-btn" onClick={addPanel}>
+                            <FaPlusCircle />
+                        </button>
+                    </div>
 
+                    <br />
+                    <h3 style={{textAlign: "center"}}>Total damaged panels: {cntDamagedPanel}</h3>
+                    <br />
+                    <br />
                     <hr />
                     <br />
 
@@ -614,12 +610,7 @@ export default function CustReportGen() {
                     <br />
                     <label>
                         Panel Image:
-                        <input
-                            type="file"
-                            multiple
-                            name="images"
-                            onChange={onSelectImgFile}
-                        />
+                        <input id="image-upload-box" style={{height: "150px"}} type="file" multiple name="images" onChange={onSelectImgFile}/>
                     </label>
 
                     <br />
@@ -628,9 +619,16 @@ export default function CustReportGen() {
                         setPanelImage={setPanelImage}
                     />
                     <br />
+                    <hr />
+                    <hr />
                     <Tippy content="Download PDF">
-                        <Button type="submit">Generate Report</Button>
+                        <div id="gen-report-btn-container">
+                            <Button type="submit">Generate Report</Button>
+                        </div>
                     </Tippy>
+                    <hr />
+                    <hr />
+
                 </form>
 
                 <LogoBanner />
