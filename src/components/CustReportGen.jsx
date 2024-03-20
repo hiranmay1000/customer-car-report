@@ -11,6 +11,7 @@ import ImgPrevComp from "./ImgPrevComp";
 import LogoBanner from "./LogoBanner";
 import Footer from "./Footer";
 import { FaMinusCircle, FaPlusCircle } from "react-icons/fa";
+import RenderNewPanels from "./RenderNewPanels";
 
 
 
@@ -47,17 +48,19 @@ export default function CustReportGen() {
     const [isInterested, setIsInterested] = useState("N/A");
 
     const [panelImage, setPanelImage] = useState([]);
+    const [panelData, setPanelData] = useState([]);
  
 
     const handleInputChange = (e, setter) => {
-        // let val = e.target.value.toUpperCase(); // Using built-in function to convert to uppercase
         setter(e.target.value);
     };
-    
 
-    const marutiLogo = (doc) => {
-        doc.addImage(msLogo, 30, 15, 85, 18);
-    };
+    // Vehicle number is in capital
+    const handleInputChangeForRegNum = (e, setter) => {
+        let val = e.target.value.toUpperCase(); 
+        setter(val);
+    }
+
 
 
 
@@ -74,7 +77,7 @@ export default function CustReportGen() {
             },
         };
 
-        marutiLogo(doc);
+        doc.addImage(msLogo, 30, 15, 85, 18); // Maruti Suzuki logo top left
         doc.setFontSize(12);
         doc.text(370, 28, dealerDate);
         doc.setFontSize(15);
@@ -155,6 +158,7 @@ export default function CustReportGen() {
             },
         };
 
+        // Damaged panels data
         const allPanelData = panelData.map((panel, index) => {
             const { bodyPanel, damageType, damageSeverity, remarks } = panel;
             return [
@@ -251,20 +255,16 @@ export default function CustReportGen() {
 
 
 
-    const handleSubmit = (e) => {
-        e.preventDefault();
-        const doc = new jsPDF("portrait", "px", "a4", "false");
 
-        // add details
-        addDetailsToPdf(doc);
+    const handleDateFormat = (date) => {
+        const breakDate = date.split("-");
+        let yyyy = breakDate[0];
+        let mm = breakDate[1];
+        let dd = breakDate[2];
 
-        // add images
-        if (panelImage.length > 0) {
-            doc.addPage();
-            addImagesToPdf(doc);
-        }
-
-        // doc.save("customer-report.pdf");
+        const formattedDate = dd + "-" + mm + "-" + yyyy;
+        console.log(formattedDate);
+        return formattedDate;
     };
 
 
@@ -279,6 +279,10 @@ export default function CustReportGen() {
         setPanelImage(imgArr);
     };
 
+
+
+    
+
     const [cntDamagedPanel, setCntDamagePanel] = useState(1);
     const [panels, setPanels] = useState([
         {
@@ -288,6 +292,9 @@ export default function CustReportGen() {
             remarks: "N/A",
         },
     ]);
+
+
+
 
     const addPanel = () => {
         if (panels.length < 15) {
@@ -305,6 +312,9 @@ export default function CustReportGen() {
             setCntDamagePanel("Maximum limit reached!");
         }
     };
+
+
+
     const deletePanel = () => {
         if (panels.length > 1) {
             const newInputs = [...panels];
@@ -314,113 +324,40 @@ export default function CustReportGen() {
         }
     };
 
-    const [panelData, setPanelData] = useState([]);
-    const handleInputChange2 = (val, index, key) => {
-        const newPanelData = [...panelData];
-        newPanelData[index] = {
-            ...newPanelData[index],
-            [key]: val,
-        };
-        setPanelData(newPanelData);
+
+
+
+
+
+
+
+        
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        const doc = new jsPDF("portrait", "px", "a4", "false"); // Initialize blank pdf page
+
+        // add details
+        addDetailsToPdf(doc);
+
+        // add images
+        if (panelImage.length > 0) {
+            doc.addPage();
+            addImagesToPdf(doc);
+        }
     };
 
-    const renderpanels = () => {
-        return panels.map((panel, index) => (
-            <React.Fragment key={index}>
-                <div className="panel-inputs-increment">
-                    <h3 style={{ textAlign: "center" }}>PANEL {index + 1}</h3>
-                    <br />
-                    <div>
-                        <br />
-                        <label>
-                            Which body panel(s) require repair?
-                            <input
-                                type="text"
-                                onChange={(e) => {
-                                    handleInputChange2(
-                                        e.target.value,
-                                        index,
-                                        "bodyPanel"
-                                    );
-                                }}
-                            />
-                        </label>
-                        <label>
-                            What type of damage is present on the panel(s)?
-                            <select
-                                onChange={(e) =>
-                                    handleInputChange2(
-                                        e.target.value,
-                                        index,
-                                        "damageType"
-                                    )
-                                }
-                            >
-                                <option value={"Select"}>Select</option>
-                                <option>Dent </option>
-                                <option>Scratch</option>
-                                <option>Crack</option>
-                                <option>Fracture</option>
-                                <option>Rust</option>
-                            </select>
-                        </label>
-                        <label htmlFor="">
-                            Damage severity:
-                            <select
-                                onChange={(e) =>
-                                    handleInputChange2(
-                                        e.target.value,
-                                        index,
-                                        "damageSeverity"
-                                    )
-                                }
-                            >
-                                <option>Select</option>
-                                <option>Light</option>
-                                <option>Moderate</option>
-                                <option>Severe</option>
-                            </select>
-                        </label>{" "}
-                        <label>
-                            Remarks: &nbsp; &nbsp;
-                            <input
-                                type="text"
-                                onChange={(e) => {
-                                    handleInputChange2(
-                                        e.target.value,
-                                        index,
-                                        "remarks"
-                                    );
-                                }}
-                            />
-                        </label>
-                        <br />
-                    </div>
-                </div>
-            </React.Fragment>
-        ));
-    };
 
-    const handleDateFormat = (date) => {
-        const breakDate = date.split("-");
-        let yyyy = breakDate[0];
-        let mm = breakDate[1];
-        let dd = breakDate[2];
 
-        const formattedDate = dd + "-" + mm + "-" + yyyy;
-        console.log(formattedDate);
-        return formattedDate;
-    };
+    
+
+
 
     return (
         <>
-            <br />
-            <br />
             <div className="customer-input">
                 <div className="hero-logo">
                     <img src={msLogoHead} alt="Maruti Suzuki" />
                 </div>
-                <br />
                 <form onSubmit={handleSubmit} spellCheck={"false"}>
                     <hr />
                     <br />
@@ -503,7 +440,7 @@ export default function CustReportGen() {
                         <input
                             type="text" value={vehicleRegNo} placeholder="WB66T5888"
                             onChange={(e) =>
-                                handleInputChange(e, setVehicleRegNo)
+                                handleInputChangeForRegNum(e, setVehicleRegNo)
                             }
                         />
                     </label>
@@ -553,11 +490,12 @@ export default function CustReportGen() {
                     <h3>PANEL DETAILS</h3>
                     <br />
                     <div>
-                        <div>{renderpanels()}</div>
-                        {/* <h5>
-                            Input:
-                            {panelData.map((panel) => JSON.stringify(panel))}
-                        </h5> */}
+                        {/* <div>{renderNewPanels()}</div> */}
+                        <RenderNewPanels 
+                            panelData = {panelData}
+                            setPanelData = {setPanelData}
+                            panels = {panels}
+                        />
                     </div>
 
                     <div id="add-rmv-panel-btn">
@@ -593,7 +531,7 @@ export default function CustReportGen() {
                     <hr />
                     <br />
                     <h3>UPLOAD IMAGES</h3>
-                    <p><strong>Note: </strong>Please upload images in landscape mode only</p>
+                    <p><strong>Note: </strong>Please upload images in<span style={{background: "#9accff"}}> <em>landscape mode</em> </span> only</p>
                     <br />
                     <label>
                         Panel Image:

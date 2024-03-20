@@ -11,6 +11,7 @@ body {
     box-shadow: 0px 0px 120px #050505;
     position: relative;
 
+
     h1 {
         text-align: center;
         color: #2d3c57;
@@ -34,7 +35,7 @@ body {
 
             input,
             select {
-                display: unset;
+                // display: unset;
                 height: 40px;
                 border: none;
                 border-radius: 5px;
@@ -159,6 +160,16 @@ body {
     }
 }
 
+
+// TABLET SUPPORT
+@media screen and (max-width: 1400px){
+    .customer-input{
+        width: 90%;
+    }
+}
+
+
+// MOBILE SUPPORT
 @media screen and (max-width: 700px) {
     .customer-input {
         width: 95%;
