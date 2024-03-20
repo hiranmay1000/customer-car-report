@@ -248,8 +248,7 @@ export default function CustReportGen() {
             }
         }
 
-        mydoc.save("images");
-
+        mydoc.save("customer-report");
     };
 
 
