@@ -2,6 +2,16 @@
 
 Welcome to the **Customer Car Report Generator**, a cutting-edge application designed to streamline the reporting of car damage, servicing updates, and maintenance records. Built with modern web technologies, this tool simplifies data entry and provides actionable insights for customers and service providers alike.
 
+## DEMO
+
+
+![customer_car_damage_report_gif](https://github.com/user-attachments/assets/9fb74a0e-e2e4-4164-8ac6-10ed8750551a)
+
+# VISIT
+[https://www.getdamagereport.vercel.app](https://getdamagereport.vercel.app/)
+
+
+
 ## Key Features
 
 - **User-Friendly Interface**: A sleek and responsive UI built with React.js for seamless user experience.
@@ -10,13 +20,7 @@ Welcome to the **Customer Car Report Generator**, a cutting-edge application des
 - **Data Insights**: Generate comprehensive reports in just a few clicks.
 - **Secure and Scalable**: Designed for robustness and scalability, ensuring secure data handling.
 
-## DEMO
 
-
-![customer_car_damage_report_gif](https://github.com/user-attachments/assets/9fb74a0e-e2e4-4164-8ac6-10ed8750551a)
-
-# VISIT
-[https://www.getdamagereport.vercel.app](https://getdamagereport.vercel.app/)
 
 ## Technologies Used
 
